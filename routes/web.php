@@ -1,7 +1,10 @@
 <?php
 
+
+use App\Http\Controllers\PageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Mockery\Generator\StringManipulation\Pass\Pass;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,21 +21,24 @@ use Illuminate\Support\Facades\Route;
 | * Route::Put -> Actualizar
 */
 
-Route::get('/', function () {
-    return view('Home');
-})->name('home');
 
-Route::get('blog', function () {
-    //CONSULTA LISTADO
-    $posts = [
-        ['id' => 1, 'title' => 'php', 'slug' => 'php'],
-        ['id' => 2, 'title' => 'laravel', 'slug' => 'laravel'],
-    ];
-    return view('blog', ['post' => $posts]);
-})->name('blog');
+/**
+ * Ejemplo de Rutas con controlador
+ *
+Route::get('/',[PageController::class, 'home'])->name('home');
 
-Route::get('blog/{slug}', function ($slug) {
-    //CONSULTA POST
-    $post = $slug;
-    return view('post', ['post' => $post]);
-})->name('post');
+Route::get('blog', [PageController::class, 'blog'])->name('blog');
+
+Route::get('blog/{slug}', [PageController::class, 'post'])->name('post');
+ */
+
+/**
+ * Ejemplo de Grupo del controlador ->
+ */
+Route::controller(PageController::class)->group(function () {
+    Route::get('/', 'home')->name('home');
+
+    Route::get('blog', 'blog')->name('blog');
+
+    Route::get('blog/{slug}', 'post')->name('post');
+});
